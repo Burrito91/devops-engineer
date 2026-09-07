@@ -1,0 +1,30 @@
+{
+  "family": "burrito-devops-engineer-task",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::363267429286:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "burrito-container",
+      "image": "363267429286.dkr.ecr.eu-west-2.amazonaws.com/burrito-devops-engineer-ecr-repo:latest",
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/burrito-devops-engineer-task",
+          "awslogs-region": "eu-west-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}
+
