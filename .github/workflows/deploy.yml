@@ -10,7 +10,7 @@ env:
   ECR_REPOSITORY: burrito-devops-engineer-ecr-repo
   ECS_CLUSTER: Burrito-devops-engineer-cluster
   ECS_SERVICE: burrito-service
-  CONTAINER_NAME: burrito-container
+  CONTAINER_NAME: main
 
 permissions:
   id-token: write
