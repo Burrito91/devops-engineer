@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 363267429286.dkr.ecr.eu-west-2.amazonaws.com
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)
+
+  build:
+    commands:
+      - echo Building Docker image...
+      - docker build -t burrito-devops-engineer-ecr-repo .
+      - docker tag burrito-devops-engineer-ecr-repo:latest 363267429286.dkr.ecr.eu-west-2.amazonaws.com/burrito-devops-engineer-ecr-repo:$IMAGE_TAG
+      - docker tag burrito-devops-engineer-ecr-repo:latest 363267429286.dkr.ecr.eu-west-2.amazonaws.com/burrito-devops-engineer-ecr-repo:latest
+
+  post_build:
+    commands:
+      - echo Pushing Docker image to ECR...
+      - docker push 363267429286.dkr.ecr.eu-west-2.amazonaws.com/burrito-devops-engineer-ecr-repo:$IMAGE_TAG
+      - docker push 363267429286.dkr.ecr.eu-west-2.amazonaws.com/burrito-devops-engineer-ecr-repo:latest
+      - echo Writing imagedefinitions.json...
+      - printf '[{"name":"burrito-container","imageUri":"%s"}]' 363267429286.dkr.ecr.eu-west-2.amazonaws.com/burrito-devops-engineer-ecr-repo:$IMAGE_TAG > imagedefinitions.json
+
+artifacts:
+  files:
+    - imagedefinitions.json
