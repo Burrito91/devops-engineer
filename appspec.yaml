@@ -3,9 +3,9 @@ Resources:
   - TargetService:
       Type: AWS::ECS::Service
       Properties:
-        TaskDefinition: "arn:aws:ecs:eu-west-2:363267429286:task-definition/burrito-devops-engineer-task:1"
+        TaskDefinition: <TASK_DEFINITION>
         LoadBalancerInfo:
-          ContainerName: "burrito-container"
+          ContainerName: "Main"
           ContainerPort: 80
         PlatformVersion: "LATEST"
         NetworkConfiguration:
@@ -16,7 +16,3 @@ Resources:
             SecurityGroups:
               - "sg-03d8e6b8acaf01224"
             AssignPublicIp: "ENABLED"
-Hooks:
-  - BeforeAllowTraffic: null
-  - AfterAllowTraffic: null
- 
