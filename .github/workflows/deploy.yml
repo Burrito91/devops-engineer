@@ -10,7 +10,7 @@ env:
   ECR_REPOSITORY: burrito-devops-engineer-ecr-repo
   ECS_CLUSTER: Burrito-devops-engineer-cluster
   ECS_SERVICE: burrito-service
-  CONTAINER_NAME: main
+  CONTAINER_NAME: Main
 
 permissions:
   id-token: write
@@ -24,12 +24,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Print OIDC claims
-        run: |
-              TOKEN=$(curl -sH "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-                "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" | jq -r .value)
-              echo "$TOKEN" | cut -d. -f2 | tr '_-' '/+' | base64 -d 2>/dev/null | jq '{iss, sub, aud, repository}'
-              
+     
 
 
 
