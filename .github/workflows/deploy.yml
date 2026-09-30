@@ -55,10 +55,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Output image tag for next steps
-        run: |
-          echo "image=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}" >> $GITHUB_OUTPUT
-
       - name: Download current ECS task definition
         run: |
           aws ecs describe-task-definition \
@@ -71,22 +67,6 @@ jobs:
             --output json > task-definition.json
 
       - name: Update ECS task definition with new image
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: task-definition.json
-          container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ steps.build-image.outputs.image }}
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
-          codedeploy-appspec: appspec.yaml
-          codedeploy-application: burrito-codedeploy-app
-          codedeploy-deployment-group: burrito-deployment-group          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          wait-for-service-stability: true
-          cluster: ${{ env.ECS_CLUSTER }}
-          service: ${{ env.ECS_SERVICE }}
-        with:
-
-          - name: Update ECS task definition with new image
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
